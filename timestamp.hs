@@ -27,8 +27,3 @@ stamp = In (parseStringTime "13:45")
 
 day :: Day
 day = [In (parseStringTime "13:45"), Out (parseStringTime "13:50"), In (parseStringTime "15:00"), Out (parseStringTime "16:00")]
-
-main :: IO ()
-main = do
-  args <- getArgs
-  return ()
