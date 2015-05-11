@@ -1,29 +1,31 @@
 import Data.Time.LocalTime
+import Data.Time.Clock
 import Numeric (readDec)
 import System.Environment (getArgs)
 import Data.List
 
-data Timestamp = In { time :: TimeOfDay } | Out { time :: TimeOfDay } deriving (Eq)
+data Timestamp = Stamp { timeIn :: TimeOfDay , timeOut :: TimeOfDay } deriving (Eq)
 type Day = [Timestamp]
 
 instance Ord Timestamp where
-  (In time1) `compare` (In time2)   = time1 `compare` time2
-  (In time3) `compare` (Out time4)  = time3 `compare` time4
-  (Out time5) `compare` (In time6)  = time5 `compare` time6
-  (Out time7) `compare` (Out time8) = time7 `compare` time8
-
-instance Show Timestamp where
-  show (In time1)  = "In: " ++ (show time1)
-  show (Out time2) = "Out: " ++ (show time2)
+  (Stamp timeIn1 _) `compare` (Stamp timeIn2 _) = timeIn1 `compare` timeIn2
 
 -- parse times like "13:45"
-parseStringTime :: String -> TimeOfDay
-parseStringTime t = TimeOfDay h m 0
+stringToTime :: String -> TimeOfDay
+stringToTime t = TimeOfDay h m 0
   where [(h,rest)]  = readDec t
         [(m,rest1)] = readDec (tail rest)
 
-stamp :: Timestamp
-stamp = In (parseStringTime "13:45")
+stamp1 :: Timestamp
+stamp1 = Stamp { timeIn  = stringToTime "13:30"
+               , timeOut = stringToTime "13:50" }
+
+stamp2 :: Timestamp
+stamp2 = Stamp { timeIn  = stringToTime "14:00"
+               , timeOut = stringToTime "15:00" }
 
 day :: Day
-day = [In (parseStringTime "13:45"), Out (parseStringTime "13:50"), In (parseStringTime "15:00"), Out (parseStringTime "16:00")]
+day = [stamp1, stamp2]
+
+instance Show Timestamp where
+  show (Stamp timeIn timeOut) = (show timeIn) ++ " -> " ++ (show timeOut)
