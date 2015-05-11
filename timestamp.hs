@@ -3,7 +3,7 @@ import Numeric (readDec)
 import System.Environment (getArgs)
 import Data.List
 
-data Timestamp = In TimeOfDay | Out TimeOfDay deriving (Eq)
+data Timestamp = In { time :: TimeOfDay } | Out { time :: TimeOfDay } deriving (Eq)
 type Day = [Timestamp]
 
 instance Ord Timestamp where
